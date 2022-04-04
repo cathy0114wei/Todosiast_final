@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:elevation="10dp"
+    app:cardElevation="10dp"
+    android:layout_margin="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+
+        <TextView
+            android:id="@+id/dateTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-2dp"
+            android:layout_marginEnd="21dp"
+            android:padding="10dp"
+            android:text="April 4, 2022"
+            android:textColor="#454343"
+            android:textSize="10sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/taskTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="-1dp"
+            android:layout_toEndOf="@+id/checkBox"
+            android:padding="5dp"
+            android:text="Task"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/descriptionTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="74dp"
+            android:layout_marginTop="34dp"
+            android:layout_toEndOf="@+id/checkBox"
+            android:text="Description"
+            android:textColor="#000"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>
