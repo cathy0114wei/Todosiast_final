@@ -40,6 +40,6 @@ dependencies {
     // yy: used the following line but getting an error, so change the following line to
     // 'com.google.firebase:firebase-core:9.0.0'
     // implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-core:9.0.0'
+    implementation 'com.google.firebase:firebase-core:20.1.0'
     implementation 'com.google.android.material:material:1.1.0'
 }
