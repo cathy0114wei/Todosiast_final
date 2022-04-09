@@ -6,12 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,6 +38,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class HomeActivity extends AppCompatActivity {
+
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
@@ -40,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference reference;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
-    private String onlineUserId;
+    private String onlineUserID;
 
     private ProgressDialog loader;
 
@@ -51,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home);
 
         toolbar = findViewById(R.id.homeToolbar);
@@ -67,14 +74,15 @@ public class HomeActivity extends AppCompatActivity {
 
         loader = new ProgressDialog(this);
 
+
         mUser = mAuth.getCurrentUser();
-        onlineUserId = mUser.getUid();
-        reference = FirebaseDatabase.getInstance().getReference().child("tasks").child(onlineUserId);
+        onlineUserID = mUser.getUid();
+        reference = FirebaseDatabase.getInstance().getReference().child("tasks").child(onlineUserID);
 
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 addTask();
             }
         });
@@ -87,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
         View myView = inflater.inflate(R.layout.input_file, null);
         myDialog.setView(myView);
 
-        AlertDialog dialog = myDialog.create();
+        final AlertDialog dialog = myDialog.create();
         dialog.setCancelable(false);
 
         final EditText task = myView.findViewById(R.id.task);
@@ -97,25 +105,25 @@ public class HomeActivity extends AppCompatActivity {
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 String mTask = task.getText().toString().trim();
                 String mDescription = description.getText().toString().trim();
                 String id = reference.push().getKey();
                 String date = DateFormat.getDateInstance().format(new Date());
 
-                if(TextUtils.isEmpty(mTask)) {
+
+                if (TextUtils.isEmpty(mTask)) {
                     task.setError("Task Required");
                     return;
                 }
-
-                if(TextUtils.isEmpty(mDescription)) {
+                if (TextUtils.isEmpty(mDescription)) {
                     description.setError("Description Required");
                     return;
                 } else {
@@ -127,7 +135,7 @@ public class HomeActivity extends AppCompatActivity {
                     reference.child(id).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
+                            if (task.isSuccessful()) {
                                 Toast.makeText(HomeActivity.this, "Task has been inserted successfully", Toast.LENGTH_SHORT).show();
                                 loader.dismiss();
                             } else {
@@ -137,13 +145,14 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         }
                     });
+
                 }
+
                 dialog.dismiss();
             }
         });
 
         dialog.show();
-
     }
 
     @Override
@@ -153,12 +162,26 @@ public class HomeActivity extends AppCompatActivity {
         FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
                 .setQuery(reference, Model.class)
                 .build();
+
         FirebaseRecyclerAdapter<Model, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Model, MyViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Model model) {
+            protected void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") final int position, @NonNull final Model model) {
                 holder.setDate(model.getDate());
                 holder.setTask(model.getTask());
                 holder.setDesc(model.getDescription());
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        key = getRef(position).getKey();
+                        task = model.getTask();
+                        description = model.getDescription();
+
+                        updateTask();
+                    }
+                });
+
+
             }
 
             @NonNull
@@ -173,17 +196,19 @@ public class HomeActivity extends AppCompatActivity {
         adapter.startListening();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         View mView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
         }
+
         public void setTask(String task) {
             TextView taskTectView = mView.findViewById(R.id.taskTv);
             taskTectView.setText(task);
         }
+
         public void setDesc(String desc) {
             TextView descTectView = mView.findViewById(R.id.descriptionTv);
             descTectView.setText(desc);
@@ -191,7 +216,95 @@ public class HomeActivity extends AppCompatActivity {
 
         public void setDate(String date) {
             TextView dateTextView = mView.findViewById(R.id.dateTv);
-            dateTextView.setText(date);
         }
+    }
+
+    private void updateTask() {
+        AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.update_data, null);
+        myDialog.setView(view);
+
+        final AlertDialog dialog = myDialog.create();
+
+        final EditText mTask = view.findViewById(R.id.mEditTextTask);
+        final EditText mDescription = view.findViewById(R.id.mEditTextDescription);
+
+        mTask.setText(task);
+        mTask.setSelection(task.length());
+
+        mDescription.setText(description);
+        mDescription.setSelection(description.length());
+
+        Button delButton = view.findViewById(R.id.btnDelete);
+        Button updateButton = view.findViewById(R.id.btnUpdate);
+
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                task = mTask.getText().toString().trim();
+                description = mDescription.getText().toString().trim();
+
+                String date = DateFormat.getDateInstance().format(new Date());
+
+                Model model = new Model(task, description, key, date);
+
+                reference.child(key).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (task.isSuccessful()){
+                            Toast.makeText(HomeActivity.this, "Data has been updated successfully", Toast.LENGTH_SHORT).show();
+                        }else {
+                            String err = task.getException().toString();
+                            Toast.makeText(HomeActivity.this, "update failed "+err, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
+                dialog.dismiss();
+
+            }
+        });
+
+        delButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reference.child(key).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText(HomeActivity.this, "Task deleted successfully", Toast.LENGTH_SHORT).show();
+                        }else {
+                            String err = task.getException().toString();
+                            Toast.makeText(HomeActivity.this, "Failed to delete task "+ err, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout:
+                mAuth.signOut();
+                Intent intent  = new Intent(HomeActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Mobile_final</string>
+    <string name="update_your_task">Update your task</string>
+    <string name="task">Task</string>
+
+    <string name="description">Description</string>
+
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+    <string name="log_out">Log out</string>
 </resources>
