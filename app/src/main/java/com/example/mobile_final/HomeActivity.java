@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -197,15 +199,33 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        View mView;
+        public View mView;
+        public CheckBox checkBox;
+        public TextView taskTectView;
+        public TextView finish;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
+            taskTectView = mView.findViewById(R.id.taskTv);
+            finish = mView.findViewById(R.id.finish);
+            finish.setVisibility(View.GONE);
+            checkBox = itemView.findViewById(R.id.checkBox);
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!taskTectView.getPaint().isStrikeThruText()) {
+                        taskTectView.setPaintFlags(taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        finish.setVisibility(View.VISIBLE);
+                    } else {
+                        taskTectView.setPaintFlags(taskTectView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        finish.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
 
         public void setTask(String task) {
-            TextView taskTectView = mView.findViewById(R.id.taskTv);
             taskTectView.setText(task);
         }
 
