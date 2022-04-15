@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -200,7 +199,6 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 });
-
             }
 
             @NonNull
@@ -213,46 +211,6 @@ public class HomeActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
         adapter.startListening();
-    }
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public View mView;
-        public CheckBox checkBox;
-        public TextView taskTectView;
-        public TextView finish;
-
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mView = itemView;
-            taskTectView = mView.findViewById(R.id.taskTv);
-            finish = mView.findViewById(R.id.finish);
-            //finish.setVisibility(View.GONE);
-            checkBox = itemView.findViewById(R.id.checkBox);
-        }
-
-        public void setTask(String task) {
-            taskTectView.setText(task);
-        }
-
-        public void setDesc(String desc) {
-            TextView descTectView = mView.findViewById(R.id.descriptionTv);
-            descTectView.setText(desc);
-        }
-
-        public void setDate(String date) {
-            TextView dateTextView = mView.findViewById(R.id.dateTv);
-            dateTextView.setText(date);
-        }
-
-        public void setFinish(boolean status) {
-            if(status) {
-                finish.setVisibility(View.VISIBLE);
-                checkBox.setChecked(true);
-                taskTectView.setPaintFlags(taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            } else {
-                finish.setVisibility(View.GONE);
-            }
-        }
     }
 
     private void updateTask() {
