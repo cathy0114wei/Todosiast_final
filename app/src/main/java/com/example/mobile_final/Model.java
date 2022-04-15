@@ -3,6 +3,7 @@ package com.example.mobile_final;
 public class Model {
 
     private String task, description, id, date;
+    private boolean finished;
 
     public Model() {}
 
@@ -11,6 +12,7 @@ public class Model {
         this.description = description;
         this.id = id;
         this.date = date;
+        this.finished = false;
     }
 
     public String getTask() {
@@ -43,5 +45,13 @@ public class Model {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }

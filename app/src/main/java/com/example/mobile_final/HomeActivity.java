@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
     private String key = "";
     private String task;
     private String description;
+    private boolean isFinished;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
 
         final EditText task = myView.findViewById(R.id.task);
         final EditText description = myView.findViewById(R.id.description);
+
         Button save = myView.findViewById(R.id.saveBtn);
         Button cancel = myView.findViewById(R.id.cancelBtn);
 
@@ -119,7 +122,6 @@ public class HomeActivity extends AppCompatActivity {
                 String mDescription = description.getText().toString().trim();
                 String id = reference.push().getKey();
                 String date = DateFormat.getDateInstance().format(new Date());
-
 
                 if (TextUtils.isEmpty(mTask)) {
                     task.setError("Task Required");
@@ -171,6 +173,7 @@ public class HomeActivity extends AppCompatActivity {
                 holder.setDate(model.getDate());
                 holder.setTask(model.getTask());
                 holder.setDesc(model.getDescription());
+                holder.setFinish(model.getFinished());
 
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -178,11 +181,25 @@ public class HomeActivity extends AppCompatActivity {
                         key = getRef(position).getKey();
                         task = model.getTask();
                         description = model.getDescription();
+                        isFinished = model.getFinished();
 
                         updateTask();
                     }
                 });
 
+                holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
+                        if(!holder.taskTectView.getPaint().isStrikeThruText()) {
+                            holder.taskTectView.setPaintFlags(holder.taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            holder.finish.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.taskTectView.setPaintFlags(holder.taskTectView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                            holder.finish.setVisibility(View.GONE);
+                        }
+                    }
+                });
 
             }
 
@@ -209,20 +226,8 @@ public class HomeActivity extends AppCompatActivity {
             mView = itemView;
             taskTectView = mView.findViewById(R.id.taskTv);
             finish = mView.findViewById(R.id.finish);
-            finish.setVisibility(View.GONE);
+            //finish.setVisibility(View.GONE);
             checkBox = itemView.findViewById(R.id.checkBox);
-            checkBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!taskTectView.getPaint().isStrikeThruText()) {
-                        taskTectView.setPaintFlags(taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        finish.setVisibility(View.VISIBLE);
-                    } else {
-                        taskTectView.setPaintFlags(taskTectView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        finish.setVisibility(View.GONE);
-                    }
-                }
-            });
         }
 
         public void setTask(String task) {
@@ -236,6 +241,17 @@ public class HomeActivity extends AppCompatActivity {
 
         public void setDate(String date) {
             TextView dateTextView = mView.findViewById(R.id.dateTv);
+            dateTextView.setText(date);
+        }
+
+        public void setFinish(boolean status) {
+            if(status) {
+                finish.setVisibility(View.VISIBLE);
+                checkBox.setChecked(true);
+                taskTectView.setPaintFlags(taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {
+                finish.setVisibility(View.GONE);
+            }
         }
     }
 
