@@ -163,7 +163,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
-                .setQuery(reference, Model.class)
+                .setQuery(reference.orderByChild("finished"), Model.class)
                 .build();
 
         FirebaseRecyclerAdapter<Model, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Model, MyViewHolder>(options) {
@@ -206,6 +206,12 @@ public class HomeActivity extends AppCompatActivity {
             public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.retrieved_layout, parent, false);
                 return new MyViewHolder(view);
+            }
+
+            @NonNull
+            @Override
+            public Model getItem(int position) {
+                return super.getItem(getItemCount() - (position + 1));
             }
         };
 
