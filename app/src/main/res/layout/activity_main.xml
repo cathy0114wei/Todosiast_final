@@ -4,22 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    android:background="@drawable/background_design"
     android:orientation="vertical"
-    android:background="#007096">
-<ImageView
-    android:id="@+id/imageView"
-    android:layout_width="300dp"
-    android:layout_height="300dp"
-    android:src="@drawable/icon2"
-    android:layout_gravity="center"
-    android:layout_marginTop="100dp"/>
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/icon2" />
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Todosiast!"
         android:layout_gravity="center"
+        android:text="Welcome to Todosiast!"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
