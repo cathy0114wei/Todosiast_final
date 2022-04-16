@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         imageView.setAnimation(topAnim);
         textView.setAnimation(bottomAnim);
 
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
