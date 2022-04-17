@@ -8,21 +8,19 @@
         <entry key="app/src/main/res/drawable/ic_add_black_24dp.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_add_yellow_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_post_add_24.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/ic_lock.xml" value="0.3155" />
         <entry key="app/src/main/res/drawable/inputs.xml" value="0.1315" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.2926829268292683" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26202239990234377" />
         <entry key="app/src/main/res/layout/activity_registration.xml" value="0.24864130434782608" />
         <entry key="app/src/main/res/layout/input_file.xml" value="0.2171875" />
-        <entry key="app/src/main/res/layout/retrieved_layout.xml" value="0.3061594202898551" />
-        <entry key="app/src/main/res/layout/update_data.xml" value="0.17708333333333334" />
-        <entry key="app/src/main/res/menu/main_menu.xml" value="0.33489583333333334" />
+        <entry key="app/src/main/res/layout/retrieved_layout.xml" value="0.11752786220871327" />
+        <entry key="app/src/main/res/layout/update_data.xml" value="0.11752786220871327" />
+        <entry key="app/src/main/res/layout/voice_input_file.xml" value="0.203125" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="14" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

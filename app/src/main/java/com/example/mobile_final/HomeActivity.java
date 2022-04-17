@@ -3,14 +3,21 @@ package com.example.mobile_final;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 //import android.widget.Toolbar;
@@ -37,13 +45,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatingActionButton1;
+    private FloatingActionButton floatingActionButton2;
 
     private DatabaseReference reference;
     private FirebaseAuth mAuth;
@@ -56,6 +67,13 @@ public class HomeActivity extends AppCompatActivity {
     private String task;
     private String description;
     private boolean isFinished;
+
+    //private View myView;
+
+
+//    EditText editText;
+    int count;
+    SpeechRecognizer sr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,82 +99,167 @@ public class HomeActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         onlineUserID = mUser.getUid();
         reference = FirebaseDatabase.getInstance().getReference().child("tasks").child(onlineUserID);
-
-        floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addTask();
-            }
-        });
+        count = 0;
+        floatingActionButton1 = findViewById(R.id.voice);
+        floatingActionButton1.setOnClickListener(v -> addVoiceMemo());
+        floatingActionButton2 = findViewById(R.id.fab);
+//        floatingActionButton2.setOnClickListener(v ->addTask());
     }
 
-    private void addTask() {
+    private void addVoiceMemo(){
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        View myView = inflater.inflate(R.layout.input_file, null);
+        View myView = inflater.inflate(R.layout.voice_input_file, null);
         myDialog.setView(myView);
 
         final AlertDialog dialog = myDialog.create();
         dialog.setCancelable(false);
 
-        final EditText task = myView.findViewById(R.id.task);
-        final EditText description = myView.findViewById(R.id.description);
+        ImageButton imageButton = myView.findViewById(R.id.speakBtn);
+        EditText editText = myView.findViewById(R.id.speechText);
 
-        Button save = myView.findViewById(R.id.saveBtn);
-        Button cancel = myView.findViewById(R.id.cancelBtn);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+        }
+        sr = SpeechRecognizer.createSpeechRecognizer(this);
 
-        cancel.setOnClickListener(new View.OnClickListener() {
+        Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mTask = task.getText().toString().trim();
-                String mDescription = description.getText().toString().trim();
-                String id = reference.push().getKey();
-                String date = DateFormat.getDateInstance().format(new Date());
-
-                if (TextUtils.isEmpty(mTask)) {
-                    task.setError("Task Required");
-                    return;
-                }
-                if (TextUtils.isEmpty(mDescription)) {
-                    description.setError("Description Required");
-                    return;
+            public void onClick(View view) {
+                if (count == 0){
+                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
+                    //start listening
+                    sr.startListening(srIntent);
+                    System.out.println("before");
+                    count = 1;
                 } else {
-                    loader.setMessage("Adding your data");
-                    loader.setCanceledOnTouchOutside(false);
-                    loader.show();
-
-                    Model model = new Model(mTask, mDescription, id, date);
-                    reference.child(id).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(HomeActivity.this, "Task has been inserted successfully", Toast.LENGTH_SHORT).show();
-                                loader.dismiss();
-                            } else {
-                                String error = task.getException().toString();
-                                Toast.makeText(HomeActivity.this, "Failed: " + error, Toast.LENGTH_SHORT).show();
-                                loader.dismiss();
-                            }
-                        }
-                    });
-
+                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_off_24));
+                    //stop listening
+                    sr.stopListening();
+                    System.out.println("after");
+                    count = 0;
                 }
-
-                dialog.dismiss();
             }
         });
+        sr.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
 
+            @Override
+            public void onBeginningOfSpeech() {
+
+            }
+
+            @Override
+            public void onRmsChanged(float v) {
+
+            }
+
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+
+            }
+
+            @Override
+            public void onError(int i) {
+
+            }
+
+            @Override
+            public void onResults(Bundle results) {
+                ArrayList<String> data = results.getStringArrayList(sr.RESULTS_RECOGNITION);
+                System.out.println(data);
+                if (data != null) editText.setText(data.get(0));
+            }
+
+            @Override
+            public void onPartialResults(Bundle bundle) {
+
+            }
+
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+
+            }
+        });
         dialog.show();
     }
+//    private void addTask() {
+//        AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+//        LayoutInflater inflater = LayoutInflater.from(this);
+//
+//        View myView = inflater.inflate(R.layout.input_file, null);
+//        myDialog.setView(myView);
+//
+//        final AlertDialog dialog = myDialog.create();
+//        dialog.setCancelable(false);
+//
+//        final EditText task = myView.findViewById(R.id.task);
+//        final EditText description = myView.findViewById(R.id.description);
+//
+//        Button save = myView.findViewById(R.id.saveBtn);
+//        Button cancel = myView.findViewById(R.id.cancelBtn);
+//
+//        cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        save.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String mTask = task.getText().toString().trim();
+//                String mDescription = description.getText().toString().trim();
+//                String id = reference.push().getKey();
+//                String date = DateFormat.getDateInstance().format(new Date());
+//
+//                if (TextUtils.isEmpty(mTask)) {
+//                    task.setError("Task Required");
+//                    return;
+//                }
+//                if (TextUtils.isEmpty(mDescription)) {
+//                    description.setError("Description Required");
+//                    return;
+//                } else {
+//                    loader.setMessage("Adding your data");
+//                    loader.setCanceledOnTouchOutside(false);
+//                    loader.show();
+//
+//                    Model model = new Model(mTask, mDescription, id, date);
+//                    reference.child(id).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if (task.isSuccessful()) {
+//                                Toast.makeText(HomeActivity.this, "Task has been inserted successfully", Toast.LENGTH_SHORT).show();
+//                                loader.dismiss();
+//                            } else {
+//                                String error = task.getException().toString();
+//                                Toast.makeText(HomeActivity.this, "Failed: " + error, Toast.LENGTH_SHORT).show();
+//                                loader.dismiss();
+//                            }
+//                        }
+//                    });
+//
+//                }
+//
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
 
     @Override
     protected void onStart() {
@@ -306,5 +409,17 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Permission Grated", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
