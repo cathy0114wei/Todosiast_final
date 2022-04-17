@@ -68,12 +68,9 @@ public class HomeActivity extends AppCompatActivity {
     private String description;
     private boolean isFinished;
 
-    //private View myView;
 
-
-//    EditText editText;
-    int count;
-    SpeechRecognizer sr;
+    private int count;
+    private SpeechRecognizer sr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
         floatingActionButton1 = findViewById(R.id.voice);
         floatingActionButton1.setOnClickListener(v -> addVoiceMemo());
         floatingActionButton2 = findViewById(R.id.fab);
-//        floatingActionButton2.setOnClickListener(v ->addTask());
+        floatingActionButton2.setOnClickListener(v ->addTask());
     }
 
     private void addVoiceMemo(){
@@ -123,7 +120,7 @@ public class HomeActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
         sr = SpeechRecognizer.createSpeechRecognizer(this);
-
+        Button cancelVoice = myView.findViewById(R.id.cancelVoice);
         Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -193,73 +190,74 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+        cancelVoice.setOnClickListener(v -> dialog.dismiss());
     }
-//    private void addTask() {
-//        AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//
-//        View myView = inflater.inflate(R.layout.input_file, null);
-//        myDialog.setView(myView);
-//
-//        final AlertDialog dialog = myDialog.create();
-//        dialog.setCancelable(false);
-//
-//        final EditText task = myView.findViewById(R.id.task);
-//        final EditText description = myView.findViewById(R.id.description);
-//
-//        Button save = myView.findViewById(R.id.saveBtn);
-//        Button cancel = myView.findViewById(R.id.cancelBtn);
-//
-//        cancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        save.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String mTask = task.getText().toString().trim();
-//                String mDescription = description.getText().toString().trim();
-//                String id = reference.push().getKey();
-//                String date = DateFormat.getDateInstance().format(new Date());
-//
-//                if (TextUtils.isEmpty(mTask)) {
-//                    task.setError("Task Required");
-//                    return;
-//                }
-//                if (TextUtils.isEmpty(mDescription)) {
-//                    description.setError("Description Required");
-//                    return;
-//                } else {
-//                    loader.setMessage("Adding your data");
-//                    loader.setCanceledOnTouchOutside(false);
-//                    loader.show();
-//
-//                    Model model = new Model(mTask, mDescription, id, date);
-//                    reference.child(id).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            if (task.isSuccessful()) {
-//                                Toast.makeText(HomeActivity.this, "Task has been inserted successfully", Toast.LENGTH_SHORT).show();
-//                                loader.dismiss();
-//                            } else {
-//                                String error = task.getException().toString();
-//                                Toast.makeText(HomeActivity.this, "Failed: " + error, Toast.LENGTH_SHORT).show();
-//                                loader.dismiss();
-//                            }
-//                        }
-//                    });
-//
-//                }
-//
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        dialog.show();
-//    }
+    private void addTask() {
+        AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        View myView = inflater.inflate(R.layout.input_file, null);
+        myDialog.setView(myView);
+
+        final AlertDialog dialog = myDialog.create();
+        dialog.setCancelable(false);
+
+        final EditText task = myView.findViewById(R.id.task);
+        final EditText description = myView.findViewById(R.id.description);
+
+        Button save = myView.findViewById(R.id.saveBtn);
+        Button cancel = myView.findViewById(R.id.cancelBtn);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String mTask = task.getText().toString().trim();
+                String mDescription = description.getText().toString().trim();
+                String id = reference.push().getKey();
+                String date = DateFormat.getDateInstance().format(new Date());
+
+                if (TextUtils.isEmpty(mTask)) {
+                    task.setError("Task Required");
+                    return;
+                }
+                if (TextUtils.isEmpty(mDescription)) {
+                    description.setError("Description Required");
+                    return;
+                } else {
+                    loader.setMessage("Adding your data");
+                    loader.setCanceledOnTouchOutside(false);
+                    loader.show();
+
+                    Model model = new Model(mTask, mDescription, id, date);
+                    reference.child(id).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(HomeActivity.this, "Task has been inserted successfully", Toast.LENGTH_SHORT).show();
+                                loader.dismiss();
+                            } else {
+                                String error = task.getException().toString();
+                                Toast.makeText(HomeActivity.this, "Failed: " + error, Toast.LENGTH_SHORT).show();
+                                loader.dismiss();
+                            }
+                        }
+                    });
+
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
 
     @Override
     protected void onStart() {
