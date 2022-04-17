@@ -37,7 +37,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setFinish(boolean status) {
-        if(status) {
+        if (status) {
             finish.setVisibility(View.VISIBLE);
             checkBox.setChecked(true);
             taskTectView.setPaintFlags(taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
