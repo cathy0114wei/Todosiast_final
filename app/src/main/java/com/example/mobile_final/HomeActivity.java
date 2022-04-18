@@ -419,8 +419,11 @@ public class HomeActivity extends AppCompatActivity {
 //                    }
 //                });
 //                dialog.show();
+                loader.setMessage("Loading, please wait");
+                loader.show();
                 Intent sendEmail = new Intent(this, SendEmail.class);
                 startActivity(sendEmail);
+                loader.dismiss();
                 break;
 
             case R.id.reward:
