@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 import androidx.appcompat.widget.*;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -56,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-//    private FloatingActionButton floatingActionButton1;
+    //    private FloatingActionButton floatingActionButton1;
     private FloatingActionButton floatingActionButton2;
 
     private DatabaseReference reference;
@@ -100,101 +101,11 @@ public class HomeActivity extends AppCompatActivity {
         onlineUserID = mUser.getUid();
         reference = FirebaseDatabase.getInstance().getReference().child("tasks").child(onlineUserID);
         count = 0;
-//        floatingActionButton1 = findViewById(R.id.voice);
-//        floatingActionButton1.setOnClickListener(v -> addVoiceMemo());
         floatingActionButton2 = findViewById(R.id.fab);
-        floatingActionButton2.setOnClickListener(v ->addTask());
+        floatingActionButton2.setOnClickListener(v -> addTask());
     }
 
-//    private void addVoiceMemo(){
-//        AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//
-//        View myView = inflater.inflate(R.layout.voice_input_file, null);
-//        myDialog.setView(myView);
-//
-//        final AlertDialog dialog = myDialog.create();
-//        dialog.setCancelable(false);
-//
-//        ImageButton imageButton = myView.findViewById(R.id.speakBtn);
-//        EditText editText = myView.findViewById(R.id.speechText);
-//
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
-//        }
-//        sr = SpeechRecognizer.createSpeechRecognizer(this);
-//        Button cancelVoice = myView.findViewById(R.id.cancelVoice);
-//        Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-//        imageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (count == 0){
-//                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
-//                    //start listening
-//                    sr.startListening(srIntent);
-//                    System.out.println("before");
-//                    count = 1;
-//                } else {
-//                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_off_24));
-//                    //stop listening
-//                    sr.stopListening();
-//                    System.out.println("after");
-//                    count = 0;
-//                }
-//            }
-//        });
-//        sr.setRecognitionListener(new RecognitionListener() {
-//            @Override
-//            public void onReadyForSpeech(Bundle bundle) {
-//            }
-//
-//            @Override
-//            public void onBeginningOfSpeech() {
-//
-//            }
-//
-//            @Override
-//            public void onRmsChanged(float v) {
-//
-//            }
-//
-//            @Override
-//            public void onBufferReceived(byte[] bytes) {
-//
-//            }
-//
-//            @Override
-//            public void onEndOfSpeech() {
-//
-//            }
-//
-//            @Override
-//            public void onError(int i) {
-//
-//            }
-//
-//            @Override
-//            public void onResults(Bundle results) {
-//                ArrayList<String> data = results.getStringArrayList(sr.RESULTS_RECOGNITION);
-//                System.out.println(data);
-//                if (data != null) editText.setText(data.get(0));
-//            }
-//
-//            @Override
-//            public void onPartialResults(Bundle bundle) {
-//
-//            }
-//
-//            @Override
-//            public void onEvent(int i, Bundle bundle) {
-//
-//            }
-//        });
-//        dialog.show();
-//        cancelVoice.setOnClickListener(v -> dialog.dismiss());
-//    }
+
     private void addTask() {
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -220,18 +131,18 @@ public class HomeActivity extends AppCompatActivity {
         ImageButton imageButton = myView.findViewById(R.id.speakBtn);
         //EditText editText = myView.findViewById(R.id.speechText);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
         sr = SpeechRecognizer.createSpeechRecognizer(this);
         //Button cancelVoice = myView.findViewById(R.id.cancelVoice);
         Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (count == 0){
+                if (count == 0) {
                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
                     //start listening
                     sr.startListening(srIntent);
@@ -246,22 +157,28 @@ public class HomeActivity extends AppCompatActivity {
         });
         sr.setRecognitionListener(new RecognitionListener() {
             @Override
-            public void onReadyForSpeech(Bundle bundle) { }
+            public void onReadyForSpeech(Bundle bundle) {
+            }
 
             @Override
-            public void onBeginningOfSpeech() { }
+            public void onBeginningOfSpeech() {
+            }
 
             @Override
-            public void onRmsChanged(float v) { }
+            public void onRmsChanged(float v) {
+            }
 
             @Override
-            public void onBufferReceived(byte[] bytes) { }
+            public void onBufferReceived(byte[] bytes) {
+            }
 
             @Override
-            public void onEndOfSpeech() { }
+            public void onEndOfSpeech() {
+            }
 
             @Override
-            public void onError(int i) { }
+            public void onError(int i) {
+            }
 
             @Override
             public void onResults(Bundle results) {
@@ -276,10 +193,12 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPartialResults(Bundle bundle) { }
+            public void onPartialResults(Bundle bundle) {
+            }
 
             @Override
-            public void onEvent(int i, Bundle bundle) { }
+            public void onEvent(int i, Bundle bundle) {
+            }
         });
 
 
@@ -369,7 +288,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
-                        if(!holder.textView.getPaint().isStrikeThruText()) {
+                        if (!holder.textView.getPaint().isStrikeThruText()) {
                             holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             holder.finish.setVisibility(View.VISIBLE);
                         } else {
@@ -432,11 +351,11 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
 
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Toast.makeText(HomeActivity.this, "Data has been updated successfully", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             String err = task.getException().toString();
-                            Toast.makeText(HomeActivity.this, "update failed "+err, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HomeActivity.this, "update failed " + err, Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -453,11 +372,11 @@ public class HomeActivity extends AppCompatActivity {
                 reference.child(key).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Toast.makeText(HomeActivity.this, "Task deleted successfully", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             String err = task.getException().toString();
-                            Toast.makeText(HomeActivity.this, "Failed to delete task "+ err, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HomeActivity.this, "Failed to delete task " + err, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -476,16 +395,16 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.logout:
                 mAuth.signOut();
-                Intent intent  = new Intent(HomeActivity.this, LoginActivity.class);
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
 //<<<<<<< HEAD
             case R.id.sendEmail:
-                
+
                 AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
                 LayoutInflater inflater = LayoutInflater.from(this);
                 View view = inflater.inflate(R.layout.send_email, null);
@@ -504,17 +423,18 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }, 1000);
                 break;
-//>>>>>>> 2dc5caf6a1fcfe5060a924171b3245b4f2a35211
+
 
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission Grated", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
@@ -527,8 +447,8 @@ public class HomeActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                finishedCount = (int)snapshot.getChildrenCount();
-                Log.d("HomeActivity", finishedCount+" in count");
+                finishedCount = (int) snapshot.getChildrenCount();
+                Log.d("HomeActivity", finishedCount + " in count");
             }
 
             @Override
@@ -537,10 +457,11 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
     private void startEvent() {
         Intent intent1 = new Intent(HomeActivity.this, RewardActivity.class);
         intent1.putExtra("FinishedCount", finishedCount);
-        Log.d("HomeActivity", finishedCount+" in start");
+        Log.d("HomeActivity", finishedCount + " in start");
         startActivity(intent1);
     }
 }
