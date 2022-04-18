@@ -57,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private FloatingActionButton floatingActionButton1;
+//    private FloatingActionButton floatingActionButton1;
     private FloatingActionButton floatingActionButton2;
 
     private DatabaseReference reference;
@@ -101,30 +101,131 @@ public class HomeActivity extends AppCompatActivity {
         onlineUserID = mUser.getUid();
         reference = FirebaseDatabase.getInstance().getReference().child("tasks").child(onlineUserID);
         count = 0;
-        floatingActionButton1 = findViewById(R.id.voice);
-        floatingActionButton1.setOnClickListener(v -> addVoiceMemo());
+//        floatingActionButton1 = findViewById(R.id.voice);
+//        floatingActionButton1.setOnClickListener(v -> addVoiceMemo());
         floatingActionButton2 = findViewById(R.id.fab);
         floatingActionButton2.setOnClickListener(v ->addTask());
     }
 
-    private void addVoiceMemo(){
+//    private void addVoiceMemo(){
+//        AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+//        LayoutInflater inflater = LayoutInflater.from(this);
+//
+//        View myView = inflater.inflate(R.layout.voice_input_file, null);
+//        myDialog.setView(myView);
+//
+//        final AlertDialog dialog = myDialog.create();
+//        dialog.setCancelable(false);
+//
+//        ImageButton imageButton = myView.findViewById(R.id.speakBtn);
+//        EditText editText = myView.findViewById(R.id.speechText);
+//
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+//        }
+//        sr = SpeechRecognizer.createSpeechRecognizer(this);
+//        Button cancelVoice = myView.findViewById(R.id.cancelVoice);
+//        Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+//        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+//        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+//        imageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (count == 0){
+//                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
+//                    //start listening
+//                    sr.startListening(srIntent);
+//                    System.out.println("before");
+//                    count = 1;
+//                } else {
+//                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_off_24));
+//                    //stop listening
+//                    sr.stopListening();
+//                    System.out.println("after");
+//                    count = 0;
+//                }
+//            }
+//        });
+//        sr.setRecognitionListener(new RecognitionListener() {
+//            @Override
+//            public void onReadyForSpeech(Bundle bundle) {
+//            }
+//
+//            @Override
+//            public void onBeginningOfSpeech() {
+//
+//            }
+//
+//            @Override
+//            public void onRmsChanged(float v) {
+//
+//            }
+//
+//            @Override
+//            public void onBufferReceived(byte[] bytes) {
+//
+//            }
+//
+//            @Override
+//            public void onEndOfSpeech() {
+//
+//            }
+//
+//            @Override
+//            public void onError(int i) {
+//
+//            }
+//
+//            @Override
+//            public void onResults(Bundle results) {
+//                ArrayList<String> data = results.getStringArrayList(sr.RESULTS_RECOGNITION);
+//                System.out.println(data);
+//                if (data != null) editText.setText(data.get(0));
+//            }
+//
+//            @Override
+//            public void onPartialResults(Bundle bundle) {
+//
+//            }
+//
+//            @Override
+//            public void onEvent(int i, Bundle bundle) {
+//
+//            }
+//        });
+//        dialog.show();
+//        cancelVoice.setOnClickListener(v -> dialog.dismiss());
+//    }
+    private void addTask() {
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        View myView = inflater.inflate(R.layout.voice_input_file, null);
+        View myView = inflater.inflate(R.layout.input_file, null);
         myDialog.setView(myView);
 
         final AlertDialog dialog = myDialog.create();
         dialog.setCancelable(false);
 
+        final EditText task = myView.findViewById(R.id.task);
+        final EditText description = myView.findViewById(R.id.description);
+
+        //AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+        //LayoutInflater inflater = LayoutInflater.from(this);
+
+        //View myView = inflater.inflate(R.layout.voice_input_file, null);
+        //myDialog.setView(myView);
+
+        //final AlertDialog dialog = myDialog.create();
+        //dialog.setCancelable(false);
+
         ImageButton imageButton = myView.findViewById(R.id.speakBtn);
-        EditText editText = myView.findViewById(R.id.speechText);
+        //EditText editText = myView.findViewById(R.id.speechText);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
         sr = SpeechRecognizer.createSpeechRecognizer(this);
-        Button cancelVoice = myView.findViewById(R.id.cancelVoice);
+        //Button cancelVoice = myView.findViewById(R.id.cancelVoice);
         Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -148,66 +249,42 @@ public class HomeActivity extends AppCompatActivity {
         });
         sr.setRecognitionListener(new RecognitionListener() {
             @Override
-            public void onReadyForSpeech(Bundle bundle) {
-            }
+            public void onReadyForSpeech(Bundle bundle) { }
 
             @Override
-            public void onBeginningOfSpeech() {
-
-            }
+            public void onBeginningOfSpeech() { }
 
             @Override
-            public void onRmsChanged(float v) {
-
-            }
+            public void onRmsChanged(float v) { }
 
             @Override
-            public void onBufferReceived(byte[] bytes) {
-
-            }
+            public void onBufferReceived(byte[] bytes) { }
 
             @Override
-            public void onEndOfSpeech() {
-
-            }
+            public void onEndOfSpeech() { }
 
             @Override
-            public void onError(int i) {
-
-            }
+            public void onError(int i) { }
 
             @Override
             public void onResults(Bundle results) {
                 ArrayList<String> data = results.getStringArrayList(sr.RESULTS_RECOGNITION);
                 System.out.println(data);
-                if (data != null) editText.setText(data.get(0));
+                if (data != null) {
+                    String tmp = description.getText().toString();
+                    tmp += data.get(0);
+                    description.setText(tmp);
+
+                }
             }
 
             @Override
-            public void onPartialResults(Bundle bundle) {
-
-            }
+            public void onPartialResults(Bundle bundle) { }
 
             @Override
-            public void onEvent(int i, Bundle bundle) {
-
-            }
+            public void onEvent(int i, Bundle bundle) { }
         });
-        dialog.show();
-        cancelVoice.setOnClickListener(v -> dialog.dismiss());
-    }
-    private void addTask() {
-        AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
-        LayoutInflater inflater = LayoutInflater.from(this);
 
-        View myView = inflater.inflate(R.layout.input_file, null);
-        myDialog.setView(myView);
-
-        final AlertDialog dialog = myDialog.create();
-        dialog.setCancelable(false);
-
-        final EditText task = myView.findViewById(R.id.task);
-        final EditText description = myView.findViewById(R.id.description);
 
         Button save = myView.findViewById(R.id.saveBtn);
         Button cancel = myView.findViewById(R.id.cancelBtn);
