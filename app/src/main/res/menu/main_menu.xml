@@ -5,12 +5,12 @@
         android:id="@+id/logout"
         android:title="@string/log_out"/>
     <item
-<<<<<<< HEAD
         android:id="@+id/sendEmail"
         android:title="share your tasks"/>
-=======
+<!--=======-->
+    <item
         android:id="@+id/reward"
         android:title="Reward"/>
->>>>>>> 2dc5caf6a1fcfe5060a924171b3245b4f2a35211
+<!--&gt;>>>>>> 2dc5caf6a1fcfe5060a924171b3245b4f2a35211-->
 
 </menu>

@@ -408,14 +408,14 @@ public class HomeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
-<<<<<<< HEAD
+//<<<<<<< HEAD
             case R.id.sendEmail:
                 
                 AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
                 LayoutInflater inflater = LayoutInflater.from(this);
                 View view = inflater.inflate(R.layout.send_email, null);
                 myDialog.setView(view);
-=======
+//=======
                 break;
             case R.id.reward:
                 loader.setMessage("Loading, please wait");
@@ -429,7 +429,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }, 1000);
                 break;
->>>>>>> 2dc5caf6a1fcfe5060a924171b3245b4f2a35211
+//>>>>>>> 2dc5caf6a1fcfe5060a924171b3245b4f2a35211
 
         }
         return super.onOptionsItemSelected(item);
