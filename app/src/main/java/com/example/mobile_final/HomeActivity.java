@@ -411,10 +411,13 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.reward:
+                loader.setMessage("Loading, please wait");
+                loader.show();
                 countFinish();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
+                        loader.dismiss();
                         startEvent();
                     }
                 }, 1000);
