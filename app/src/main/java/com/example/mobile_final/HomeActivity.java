@@ -30,7 +30,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.*;
 
@@ -372,11 +371,11 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
-                        if(!holder.taskTectView.getPaint().isStrikeThruText()) {
-                            holder.taskTectView.setPaintFlags(holder.taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        if(!holder.textView.getPaint().isStrikeThruText()) {
+                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             holder.finish.setVisibility(View.VISIBLE);
                         } else {
-                            holder.taskTectView.setPaintFlags(holder.taskTectView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             holder.finish.setVisibility(View.GONE);
                         }
                     }
@@ -486,6 +485,14 @@ public class HomeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
+//<<<<<<< HEAD
+            case R.id.sendEmail:
+                
+                AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+                LayoutInflater inflater = LayoutInflater.from(this);
+                View view = inflater.inflate(R.layout.send_email, null);
+                myDialog.setView(view);
+//=======
                 break;
             case R.id.reward:
                 loader.setMessage("Loading, please wait");
@@ -499,6 +506,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }, 1000);
                 break;
+//>>>>>>> 2dc5caf6a1fcfe5060a924171b3245b4f2a35211
 
         }
         return super.onOptionsItemSelected(item);
