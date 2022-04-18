@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mobile_final">
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
@@ -10,9 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_final">
         <activity
+            android:name=".RewardActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".RegistrationActivity"
             android:exported="false" />

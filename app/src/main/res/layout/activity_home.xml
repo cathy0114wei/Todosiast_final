@@ -23,8 +23,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent" />
+                android:layout_width="match_parent" >
 
+
+            </androidx.recyclerview.widget.RecyclerView>
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
@@ -33,6 +35,16 @@
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_baseline_post_add_24"
                 app:background="@color/black" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_baseline_add_voice_memo_24"
+                app:background="@color/white" />
+
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

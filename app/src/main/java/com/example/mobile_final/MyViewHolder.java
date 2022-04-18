@@ -11,24 +11,24 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MyViewHolder extends RecyclerView.ViewHolder {
     public View mView;
     public CheckBox checkBox;
-    public TextView taskTectView;
+    public TextView textView;
     public TextView finish;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
         mView = itemView;
-        taskTectView = mView.findViewById(R.id.taskTv);
+        textView = mView.findViewById(R.id.taskTv);
         finish = mView.findViewById(R.id.finish);
         checkBox = itemView.findViewById(R.id.checkBox);
     }
 
     public void setTask(String task) {
-        taskTectView.setText(task);
+        textView.setText(task);
     }
 
     public void setDesc(String desc) {
-        TextView descTectView = mView.findViewById(R.id.descriptionTv);
-        descTectView.setText(desc);
+        TextView descTextView = mView.findViewById(R.id.descriptionTv);
+        descTextView.setText(desc);
     }
 
     public void setDate(String date) {
@@ -37,10 +37,10 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setFinish(boolean status) {
-        if(status) {
+        if (status) {
             finish.setVisibility(View.VISIBLE);
             checkBox.setChecked(true);
-            taskTectView.setPaintFlags(taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             finish.setVisibility(View.GONE);
         }

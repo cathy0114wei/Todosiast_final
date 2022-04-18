@@ -3,14 +3,22 @@ package com.example.mobile_final;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +29,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
-//import android.widget.Toolbar;
 import androidx.appcompat.widget.*;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -33,17 +40,24 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatingActionButton1;
+    private FloatingActionButton floatingActionButton2;
 
     private DatabaseReference reference;
     private FirebaseAuth mAuth;
@@ -56,6 +70,10 @@ public class HomeActivity extends AppCompatActivity {
     private String task;
     private String description;
     private boolean isFinished;
+    private int finishedCount;
+
+    private int count;
+    private SpeechRecognizer sr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +99,102 @@ public class HomeActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         onlineUserID = mUser.getUid();
         reference = FirebaseDatabase.getInstance().getReference().child("tasks").child(onlineUserID);
-
-        floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addTask();
-            }
-        });
+        count = 0;
+        floatingActionButton1 = findViewById(R.id.voice);
+        floatingActionButton1.setOnClickListener(v -> addVoiceMemo());
+        floatingActionButton2 = findViewById(R.id.fab);
+        floatingActionButton2.setOnClickListener(v ->addTask());
     }
 
+    private void addVoiceMemo(){
+        AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        View myView = inflater.inflate(R.layout.voice_input_file, null);
+        myDialog.setView(myView);
+
+        final AlertDialog dialog = myDialog.create();
+        dialog.setCancelable(false);
+
+        ImageButton imageButton = myView.findViewById(R.id.speakBtn);
+        EditText editText = myView.findViewById(R.id.speechText);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+        }
+        sr = SpeechRecognizer.createSpeechRecognizer(this);
+        Button cancelVoice = myView.findViewById(R.id.cancelVoice);
+        Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count == 0){
+                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
+                    //start listening
+                    sr.startListening(srIntent);
+                    System.out.println("before");
+                    count = 1;
+                } else {
+                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_off_24));
+                    //stop listening
+                    sr.stopListening();
+                    System.out.println("after");
+                    count = 0;
+                }
+            }
+        });
+        sr.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+
+            }
+
+            @Override
+            public void onRmsChanged(float v) {
+
+            }
+
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+
+            }
+
+            @Override
+            public void onError(int i) {
+
+            }
+
+            @Override
+            public void onResults(Bundle results) {
+                ArrayList<String> data = results.getStringArrayList(sr.RESULTS_RECOGNITION);
+                System.out.println(data);
+                if (data != null) editText.setText(data.get(0));
+            }
+
+            @Override
+            public void onPartialResults(Bundle bundle) {
+
+            }
+
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+
+            }
+        });
+        dialog.show();
+        cancelVoice.setOnClickListener(v -> dialog.dismiss());
+    }
     private void addTask() {
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -190,11 +294,11 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
-                        if(!holder.taskTectView.getPaint().isStrikeThruText()) {
-                            holder.taskTectView.setPaintFlags(holder.taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        if(!holder.textView.getPaint().isStrikeThruText()) {
+                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             holder.finish.setVisibility(View.VISIBLE);
                         } else {
-                            holder.taskTectView.setPaintFlags(holder.taskTectView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             holder.finish.setVisibility(View.GONE);
                         }
                     }
@@ -304,14 +408,64 @@ public class HomeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
+<<<<<<< HEAD
             case R.id.sendEmail:
                 
                 AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
                 LayoutInflater inflater = LayoutInflater.from(this);
                 View view = inflater.inflate(R.layout.send_email, null);
                 myDialog.setView(view);
+=======
+                break;
+            case R.id.reward:
+                loader.setMessage("Loading, please wait");
+                loader.show();
+                countFinish();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        loader.dismiss();
+                        startEvent();
+                    }
+                }, 1000);
+                break;
+>>>>>>> 2dc5caf6a1fcfe5060a924171b3245b4f2a35211
 
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Permission Grated", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void countFinish() {
+        Query query = reference.orderByChild("finished").equalTo(true);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                finishedCount = (int)snapshot.getChildrenCount();
+                Log.d("HomeActivity", finishedCount+" in count");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void startEvent() {
+        Intent intent1 = new Intent(HomeActivity.this, RewardActivity.class);
+        intent1.putExtra("FinishedCount", finishedCount);
+        Log.d("HomeActivity", finishedCount+" in start");
+        startActivity(intent1);
     }
 }
