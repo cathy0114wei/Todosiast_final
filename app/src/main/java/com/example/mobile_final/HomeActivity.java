@@ -30,7 +30,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.*;
 
@@ -295,11 +294,11 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
-                        if(!holder.taskTectView.getPaint().isStrikeThruText()) {
-                            holder.taskTectView.setPaintFlags(holder.taskTectView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        if(!holder.textView.getPaint().isStrikeThruText()) {
+                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             holder.finish.setVisibility(View.VISIBLE);
                         } else {
-                            holder.taskTectView.setPaintFlags(holder.taskTectView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             holder.finish.setVisibility(View.GONE);
                         }
                     }
