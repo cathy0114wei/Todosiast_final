@@ -235,13 +235,11 @@ public class HomeActivity extends AppCompatActivity {
                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
                     //start listening
                     sr.startListening(srIntent);
-                    System.out.println("before");
                     count = 1;
                 } else {
                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_off_24));
                     //stop listening
                     sr.stopListening();
-                    System.out.println("after");
                     count = 0;
                 }
             }
