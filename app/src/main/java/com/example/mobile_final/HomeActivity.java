@@ -30,6 +30,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.*;
@@ -394,12 +395,37 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
 
             case R.id.sendEmail:
-
-                AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
-                LayoutInflater inflater = LayoutInflater.from(this);
-                View view = inflater.inflate(R.layout.send_email, null);
-                myDialog.setView(view);
+//                AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+//                LayoutInflater inflater = LayoutInflater.from(this);
+//                View view = inflater.inflate(R.layout.send_email, null);
+//                myDialog.setView(view);
+//                final AlertDialog dialog = myDialog.create();
+//
+//                Button cancelBtn = view.findViewById(R.id.btnCancel);
+//                Button sendBtn = view.findViewById(R.id.btnSend);
+//                EditText task = view.findViewById(R.id.emailAddress);
+//
+//                cancelBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                sendBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                    }
+//                });
+//                dialog.show();
+                loader.setMessage("Loading, please wait");
+                loader.show();
+                Intent sendEmail = new Intent(this, SendEmail.class);
+                startActivity(sendEmail);
+                loader.dismiss();
                 break;
+
             case R.id.reward:
                 loader.setMessage("Loading, please wait");
                 loader.show();
