@@ -119,23 +119,15 @@ public class HomeActivity extends AppCompatActivity {
         final EditText task = myView.findViewById(R.id.task);
         final EditText description = myView.findViewById(R.id.description);
 
-        //AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
-        //LayoutInflater inflater = LayoutInflater.from(this);
-
-        //View myView = inflater.inflate(R.layout.voice_input_file, null);
-        //myDialog.setView(myView);
-
-        //final AlertDialog dialog = myDialog.create();
-        //dialog.setCancelable(false);
 
         ImageButton imageButton = myView.findViewById(R.id.speakBtn);
-        //EditText editText = myView.findViewById(R.id.speechText);
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
         sr = SpeechRecognizer.createSpeechRecognizer(this);
-        //Button cancelVoice = myView.findViewById(R.id.cancelVoice);
+
         Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -144,12 +136,10 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (count == 0) {
                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
-                    //start listening
                     sr.startListening(srIntent);
                     count = 1;
                 } else {
                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_off_24));
-                    //stop listening
                     sr.stopListening();
                     count = 0;
                 }
