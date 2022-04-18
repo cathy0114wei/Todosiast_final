@@ -4,5 +4,8 @@
     <item
         android:id="@+id/logout"
         android:title="@string/log_out"/>
+    <item
+        android:id="@+id/sendEmail"
+        android:title="share your tasks"/>
 
 </menu>

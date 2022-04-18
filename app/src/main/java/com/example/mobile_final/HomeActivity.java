@@ -304,6 +304,13 @@ public class HomeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
+            case R.id.sendEmail:
+                
+                AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
+                LayoutInflater inflater = LayoutInflater.from(this);
+                View view = inflater.inflate(R.layout.send_email, null);
+                myDialog.setView(view);
+
         }
         return super.onOptionsItemSelected(item);
     }
