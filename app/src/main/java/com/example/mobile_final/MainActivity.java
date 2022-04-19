@@ -11,7 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LogoutListener{
 
     private static final int SPLASH = 3300;
 
@@ -19,9 +19,12 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     TextView textView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((MyApp)getApplication()).registerSessionListener(this);
+        ((MyApp)getApplication()).startUserSession();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
@@ -43,5 +46,16 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }, SPLASH);
+    }
+
+//    @Override
+//    public void onUserInteraction(){
+//        super.onUserInteraction();
+//        ((MyApp)getApplication()).onUserInteraction();
+//    }
+    @Override
+    public void onSessionLogout() {
+        finish();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }
