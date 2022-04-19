@@ -434,6 +434,9 @@ public class HomeActivity extends AppCompatActivity {
                 loader.setMessage("Loading, please wait");
                 loader.show();
                 Intent sendEmail = new Intent(this, SendEmail.class);
+                Intent intent1 = getIntent();
+                sendEmail.putExtra("username", intent1.getStringExtra("username"));
+                sendEmail.putExtra("password", intent1.getStringExtra("password"));
                 startActivity(sendEmail);
                 loader.dismiss();
                 break;

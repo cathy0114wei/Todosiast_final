@@ -32,6 +32,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ProgressDialog loader;
+//    private String username = "";
+//    private String psw = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,9 @@ public class RegistrationActivity extends AppCompatActivity {
         loader = new ProgressDialog(this);
 
         RegEmail = findViewById(R.id.RegistrationEmail);
+//        username  = RegEmail.toString();
         RegPwd = findViewById(R.id.RegistrationPassword);
+//        psw = RegPwd.toString();
         RegBtn = findViewById(R.id.RegistrationButton);
         RegnQn = findViewById(R.id.RegistrationPageQuestion);
 
@@ -80,6 +84,8 @@ public class RegistrationActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
+                                intent.putExtra("username", email);
+                                intent.putExtra("password", password);
                                 startActivity(intent);
                                 finish();
                                 loader.dismiss();

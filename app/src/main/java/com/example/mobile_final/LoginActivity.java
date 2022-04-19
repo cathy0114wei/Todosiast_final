@@ -29,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ProgressDialog loader;
+//    private String username = "";
+//    private String psw = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,9 @@ public class LoginActivity extends AppCompatActivity {
         loader = new ProgressDialog(this);
 
         loginEmail = findViewById(R.id.loginEmail);
+        //username  = loginEmail.toString();
         loginPwd = findViewById(R.id.loginPassword);
+        //psw = loginPwd.toString();
         loginBtn = findViewById(R.id.loginButton);
         loginQn = findViewById(R.id.loginPageQuestion);
 
@@ -77,6 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                intent.putExtra("username", email);
+                                intent.putExtra("password", password);
                                 startActivity(intent);
                                 finish();
                                 loader.dismiss();
