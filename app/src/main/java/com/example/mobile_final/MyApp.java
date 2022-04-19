@@ -7,6 +7,7 @@ import java.util.TimerTask;
 public class MyApp extends Application {
     private LogoutListener listener;
     private Timer timer;
+
     public void startUserSession(){
         cancelTimer();
         timer = new Timer();
@@ -26,8 +27,8 @@ public class MyApp extends Application {
         this.listener = listener;
     }
 
+    //detect user interaction and retain the log-in status
     public void onUserInteraction() {
         startUserSession();
-
     }
 }
