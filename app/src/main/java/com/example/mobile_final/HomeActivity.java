@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
@@ -80,6 +81,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home);
 
@@ -127,11 +130,20 @@ public class HomeActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
-        sr = SpeechRecognizer.createSpeechRecognizer(this);
+
+        if(SpeechRecognizer.isRecognitionAvailable(this)) {
+            //SpeechRecognizer sr = SpeechRecognizer.createSpeechRecognizer(this);
+            System.out.println("found on device");
+        } else {
+            System.out.println("no sr found on device");
+        }
+        sr = SpeechRecognizer.createSpeechRecognizer(this, ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
+
+        //sr = SpeechRecognizer.createSpeechRecognizer(this);
 
         Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        //srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        //srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -482,4 +494,6 @@ public class HomeActivity extends AppCompatActivity {
         Log.d("HomeActivity", finishedCount + " in start");
         startActivity(intent1);
     }
+
+
 }
