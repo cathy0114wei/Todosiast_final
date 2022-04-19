@@ -17,6 +17,7 @@
             android:exported="false" />
         <activity
             android:name=".RewardActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
