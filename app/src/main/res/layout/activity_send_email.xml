@@ -40,6 +40,7 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -61,6 +62,17 @@
                 android:textStyle="bold" />
         </RelativeLayout>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Please make sure you've opened access to less secure apps of your Email Account"
+        android:gravity="center"
+        android:background="@color/white"
+        android:textColor="@color/purple_200"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
