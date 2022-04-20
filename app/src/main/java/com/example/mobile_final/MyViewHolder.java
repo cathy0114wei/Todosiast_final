@@ -42,6 +42,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
             checkBox.setChecked(true);
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
+            checkBox.setChecked(false);
+            textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             finish.setVisibility(View.GONE);
         }
     }
