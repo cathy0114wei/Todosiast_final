@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -104,9 +106,25 @@ public class HomeActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         onlineUserID = mUser.getUid();
         reference = FirebaseDatabase.getInstance().getReference().child("tasks").child(onlineUserID);
-        count = 0;
+        count = 0; //initialize it to 0
         floatingActionButton2 = findViewById(R.id.fab);
         floatingActionButton2.setOnClickListener(v -> addTask());
+
+        //enable daily login rewards
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR), month = calendar.get(Calendar.MONTH), day = calendar.get(Calendar.DAY_OF_MONTH);
+        String todaysDate = year + "" + month + "" + day;
+        SharedPreferences pref = getSharedPreferences("PREF", 0);
+        boolean isToday = pref.getBoolean(todaysDate, false);
+
+        if (!isToday){
+            Toast.makeText(this, "Daily reward!!!", Toast.LENGTH_LONG).show();
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean(todaysDate, true);
+            editor.apply();
+        } else {
+            Toast.makeText(this, "You have earned daily reward today!!!", Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -405,6 +423,7 @@ public class HomeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
+                break;
 
             case R.id.sendEmail:
 //                AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
