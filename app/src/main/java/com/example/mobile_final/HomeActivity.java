@@ -61,6 +61,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
+    private RecyclerView recyclerView2;
     //    private FloatingActionButton floatingActionButton1;
     private FloatingActionButton floatingActionButton2;
 
@@ -99,6 +100,13 @@ public class HomeActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        recyclerView2 = findViewById(R.id.recyclerView2);
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(this);
+        linearLayoutManager1.setReverseLayout(true);
+        linearLayoutManager1.setStackFromEnd(true);
+        recyclerView2.setHasFixedSize(true);
+        recyclerView2.setLayoutManager(linearLayoutManager1);
 
         loader = new ProgressDialog(this);
 
@@ -266,7 +274,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
-                .setQuery(reference.orderByChild("finished"), Model.class)
+                .setQuery(reference.orderByChild("finished").equalTo(false), Model.class)
                 .build();
 
         FirebaseRecyclerAdapter<Model, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Model, MyViewHolder>(options) {
@@ -313,12 +321,44 @@ public class HomeActivity extends AppCompatActivity {
             public Model getItem(int position) {
                 return super.getItem(getItemCount() - (position + 1));
             }
-
  */
         };
-
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+
+        FirebaseRecyclerOptions<Model> options2 = new FirebaseRecyclerOptions.Builder<Model>()
+                .setQuery(reference.orderByChild("finished").equalTo(true), Model.class)
+                .build();
+        FirebaseRecyclerAdapter<Model, FinishViewHolder> adapter2 = new FirebaseRecyclerAdapter<Model, FinishViewHolder>(options2) {
+            @Override
+            protected void onBindViewHolder(@NonNull FinishViewHolder holder, @SuppressLint("RecyclerView") final int position, @NonNull final Model model) {
+                holder.setFinish(model.getFinished());
+                holder.setTask(model.getTask());
+
+                holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!holder.textView.getPaint().isStrikeThruText()) {
+                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            holder.finish.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                            holder.finish.setVisibility(View.GONE);
+                        }
+                        reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public FinishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.finished_layout, parent, false);
+                return new FinishViewHolder(view);
+            }
+        };
+        recyclerView2.setAdapter(adapter2);
+        adapter2.startListening();
     }
 
     private void updateTask() {
