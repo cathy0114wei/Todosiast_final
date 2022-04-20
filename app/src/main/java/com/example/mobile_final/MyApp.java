@@ -16,7 +16,7 @@ public class MyApp extends Application {
             public void run() {
                 listener.onSessionLogout();
             }
-        }, 10000);
+        }, 15000);
     }
 
     private void cancelTimer() {
