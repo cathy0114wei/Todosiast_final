@@ -308,7 +308,6 @@ public class HomeActivity extends AppCompatActivity {
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
                         if (!holder.textView.getPaint().isStrikeThruText()) {
                             holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             holder.finish.setVisibility(View.VISIBLE);
@@ -316,6 +315,7 @@ public class HomeActivity extends AppCompatActivity {
                             holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             holder.finish.setVisibility(View.GONE);
                         }
+                        reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
                     }
                 });
             }
@@ -326,12 +326,14 @@ public class HomeActivity extends AppCompatActivity {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.retrieved_layout, parent, false);
                 return new MyViewHolder(view);
             }
-
+/*
             @NonNull
             @Override
             public Model getItem(int position) {
                 return super.getItem(getItemCount() - (position + 1));
             }
+
+ */
         };
 
         recyclerView.setAdapter(adapter);
