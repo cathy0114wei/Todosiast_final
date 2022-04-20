@@ -41,13 +41,10 @@ public class MainActivity extends AppCompatActivity implements LogoutListener {
         textView.setAnimation(bottomAnim);
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }, SPLASH);
     }
 

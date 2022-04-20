@@ -144,17 +144,16 @@ public class HomeActivity extends AppCompatActivity {
 
         ImageButton imageButton = myView.findViewById(R.id.speakBtn);
 
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
 
-        if(SpeechRecognizer.isRecognitionAvailable(this)) {
-            //SpeechRecognizer sr = SpeechRecognizer.createSpeechRecognizer(this);
-            System.out.println("found on device");
-        } else {
-            System.out.println("no sr found on device");
-        }
+//        if(SpeechRecognizer.isRecognitionAvailable(this)) {
+//            //SpeechRecognizer sr = SpeechRecognizer.createSpeechRecognizer(this);
+//            System.out.println("found on device");
+//        } else {
+//            System.out.println("no sr found on device");
+//        }
         sr = SpeechRecognizer.createSpeechRecognizer(this, ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
 
         //sr = SpeechRecognizer.createSpeechRecognizer(this);
@@ -162,18 +161,15 @@ public class HomeActivity extends AppCompatActivity {
         Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         //srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         //srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (count == 0) {
-                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
-                    sr.startListening(srIntent);
-                    count = 1;
-                } else {
-                    imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_off_24));
-                    sr.stopListening();
-                    count = 0;
-                }
+        imageButton.setOnClickListener(view -> {
+            if (count == 0) {
+                imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));
+                sr.startListening(srIntent);
+                count = 1;
+            } else {
+                imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_off_24));
+                sr.stopListening();
+                count = 0;
             }
         });
         sr.setRecognitionListener(new RecognitionListener() {
@@ -209,7 +205,6 @@ public class HomeActivity extends AppCompatActivity {
                     String tmp = description.getText().toString();
                     tmp += data.get(0);
                     description.setText(tmp);
-
                 }
             }
 
@@ -226,52 +221,41 @@ public class HomeActivity extends AppCompatActivity {
         Button save = myView.findViewById(R.id.saveBtn);
         Button cancel = myView.findViewById(R.id.cancelBtn);
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+        cancel.setOnClickListener(v -> dialog.dismiss());
+
+        save.setOnClickListener(v -> {
+            String mTask = task.getText().toString().trim();
+            String mDescription = description.getText().toString().trim();
+            String id = reference.push().getKey();
+            String date = DateFormat.getDateInstance().format(new Date());
+
+            if (TextUtils.isEmpty(mTask)) {
+                task.setError("Task Required");
+                return;
             }
-        });
+            if (TextUtils.isEmpty(mDescription)) {
+                description.setError("Description Required");
+                return;
+            } else {
+                loader.setMessage("Adding your data");
+                loader.setCanceledOnTouchOutside(false);
+                loader.show();
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mTask = task.getText().toString().trim();
-                String mDescription = description.getText().toString().trim();
-                String id = reference.push().getKey();
-                String date = DateFormat.getDateInstance().format(new Date());
+                Model model = new Model(mTask, mDescription, id, date);
+                reference.child(id).setValue(model).addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        Toast.makeText(HomeActivity.this, "Task has been inserted successfully", Toast.LENGTH_SHORT).show();
+                        loader.dismiss();
+                    } else {
+                        String error = task1.getException().toString();
+                        Toast.makeText(HomeActivity.this, "Failed: " + error, Toast.LENGTH_SHORT).show();
+                        loader.dismiss();
+                    }
+                });
 
-                if (TextUtils.isEmpty(mTask)) {
-                    task.setError("Task Required");
-                    return;
-                }
-                if (TextUtils.isEmpty(mDescription)) {
-                    description.setError("Description Required");
-                    return;
-                } else {
-                    loader.setMessage("Adding your data");
-                    loader.setCanceledOnTouchOutside(false);
-                    loader.show();
-
-                    Model model = new Model(mTask, mDescription, id, date);
-                    reference.child(id).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(HomeActivity.this, "Task has been inserted successfully", Toast.LENGTH_SHORT).show();
-                                loader.dismiss();
-                            } else {
-                                String error = task.getException().toString();
-                                Toast.makeText(HomeActivity.this, "Failed: " + error, Toast.LENGTH_SHORT).show();
-                                loader.dismiss();
-                            }
-                        }
-                    });
-
-                }
-
-                dialog.dismiss();
             }
+
+            dialog.dismiss();
         });
 
         dialog.show();
@@ -293,16 +277,13 @@ public class HomeActivity extends AppCompatActivity {
                 holder.setDesc(model.getDescription());
                 holder.setFinish(model.getFinished());
 
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        key = getRef(position).getKey();
-                        task = model.getTask();
-                        description = model.getDescription();
-                        isFinished = model.getFinished();
+                holder.mView.setOnClickListener(v -> {
+                    key = getRef(position).getKey();
+                    task = model.getTask();
+                    description = model.getDescription();
+                    isFinished = model.getFinished();
 
-                        updateTask();
-                    }
+                    updateTask();
                 });
 
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
@@ -360,51 +341,39 @@ public class HomeActivity extends AppCompatActivity {
         Button delButton = view.findViewById(R.id.btnDelete);
         Button updateButton = view.findViewById(R.id.btnUpdate);
 
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                task = mTask.getText().toString().trim();
-                description = mDescription.getText().toString().trim();
+        updateButton.setOnClickListener(v -> {
+            task = mTask.getText().toString().trim();
+            description = mDescription.getText().toString().trim();
 
-                String date = DateFormat.getDateInstance().format(new Date());
+            String date = DateFormat.getDateInstance().format(new Date());
 
-                Model model = new Model(task, description, key, date);
+            Model model = new Model(task, description, key, date);
 
-                reference.child(key).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+            reference.child(key).setValue(model).addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
-                            Toast.makeText(HomeActivity.this, "Data has been updated successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String err = task.getException().toString();
-                            Toast.makeText(HomeActivity.this, "update failed " + err, Toast.LENGTH_SHORT).show();
-                        }
+                if (task.isSuccessful()) {
+                    Toast.makeText(HomeActivity.this, "Data has been updated successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    String err = task.getException().toString();
+                    Toast.makeText(HomeActivity.this, "update failed " + err, Toast.LENGTH_SHORT).show();
+                }
 
-                    }
-                });
+            });
 
-                dialog.dismiss();
+            dialog.dismiss();
 
-            }
         });
 
-        delButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reference.child(key).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(HomeActivity.this, "Task deleted successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String err = task.getException().toString();
-                            Toast.makeText(HomeActivity.this, "Failed to delete task " + err, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                dialog.dismiss();
-            }
+        delButton.setOnClickListener(v -> {
+            reference.child(key).removeValue().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(HomeActivity.this, "Task deleted successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    String err = task.getException().toString();
+                    Toast.makeText(HomeActivity.this, "Failed to delete task " + err, Toast.LENGTH_SHORT).show();
+                }
+            });
+            dialog.dismiss();
         });
 
         dialog.show();
@@ -426,7 +395,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 break;
-
             case R.id.sendEmail:
 //                AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
 //                LayoutInflater inflater = LayoutInflater.from(this);
@@ -467,22 +435,17 @@ public class HomeActivity extends AppCompatActivity {
                 loader.show();
                 countFinish();
                 Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        loader.dismiss();
-                        startEvent();
-                    }
+                handler.postDelayed(() -> {
+                    loader.dismiss();
+                    startEvent();
                 }, 1000);
                 break;
-
-
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -504,7 +467,6 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
@@ -515,6 +477,4 @@ public class HomeActivity extends AppCompatActivity {
         Log.d("HomeActivity", finishedCount + " in start");
         startActivity(intent1);
     }
-
-
 }

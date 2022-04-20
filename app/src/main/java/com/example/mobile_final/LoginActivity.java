@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,10 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 
 public class LoginActivity extends AppCompatActivity {
-    private Toolbar toolbar;
     private EditText loginEmail, loginPwd;
-    private Button loginBtn;
-    private TextView loginQn;
 
     private FirebaseAuth mAuth;
     private ProgressDialog loader;
@@ -38,9 +34,9 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        toolbar = findViewById(R.id.loginToolbar);
+        Toolbar toolbar = findViewById(R.id.loginToolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Login");
+        if (getSupportActionBar() != null) getSupportActionBar().setTitle("Login");
 
         mAuth = FirebaseAuth.getInstance();
         loader = new ProgressDialog(this);
@@ -49,53 +45,46 @@ public class LoginActivity extends AppCompatActivity {
         //username  = loginEmail.toString();
         loginPwd = findViewById(R.id.loginPassword);
         //psw = loginPwd.toString();
-        loginBtn = findViewById(R.id.loginButton);
-        loginQn = findViewById(R.id.loginPageQuestion);
+        Button loginBtn = findViewById(R.id.loginButton);
+        TextView loginQn = findViewById(R.id.loginPageQuestion);
 
-        loginQn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
-                startActivity(intent);
-            }
+        loginQn.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+            startActivity(intent);
         });
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = loginEmail.getText().toString().trim();
-                String password = loginPwd.getText().toString().trim();
-                if (TextUtils.isEmpty(email)){
-                    loginEmail.setError("Email is required!");
-                    return;
-                }
-                if (TextUtils.isEmpty(password)){
-                    loginPwd.setError("Password required!");
-                    return;
-                } else {
-                    loader.setMessage("Login in progress");
-                    loader.setCanceledOnTouchOutside(false);
-                    loader.show();
+        loginBtn.setOnClickListener(v -> {
+            String email = loginEmail.getText().toString().trim();
+            String password = loginPwd.getText().toString().trim();
+            if (TextUtils.isEmpty(email)){
+                loginEmail.setError("Email is required!");
+            }
+            if (TextUtils.isEmpty(password)){
+                loginPwd.setError("Password required!");
+            } else {
+                loader.setMessage("Login in progress");
+                loader.setCanceledOnTouchOutside(false);
+                loader.show();
 
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                intent.putExtra("username", email);
-                                intent.putExtra("password", password);
-                                startActivity(intent);
-                                finish();
-                                loader.dismiss();
-                            } else {
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            intent.putExtra("username", email);
+                            intent.putExtra("password", password);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            if (task.getException() != null) {
                                 String error = task.getException().toString();
                                 Toast.makeText(LoginActivity.this, "Login falied" + error, Toast.LENGTH_SHORT).show();
-                                loader.dismiss();
                             }
                         }
-                    });
-                }
-
+                        loader.dismiss();
+                    }
+                });
             }
+
         });
     }
 
