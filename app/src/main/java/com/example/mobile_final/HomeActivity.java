@@ -110,7 +110,6 @@ public class HomeActivity extends AppCompatActivity {
 
         loader = new ProgressDialog(this);
 
-
         mUser = mAuth.getCurrentUser();
         onlineUserID = mUser.getUid();
         reference = FirebaseDatabase.getInstance().getReference().child("tasks").child(onlineUserID);
@@ -134,7 +133,6 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, "You have earned daily reward today!!!", Toast.LENGTH_LONG).show();
         }
     }
-
 
     private void addTask() {
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
@@ -225,7 +223,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
         Button save = myView.findViewById(R.id.saveBtn);
         Button cancel = myView.findViewById(R.id.cancelBtn);
 
@@ -253,12 +250,11 @@ public class HomeActivity extends AppCompatActivity {
                 reference.child(id).setValue(model).addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
                         Toast.makeText(HomeActivity.this, "Task has been inserted successfully", Toast.LENGTH_SHORT).show();
-                        loader.dismiss();
                     } else {
                         String error = task1.getException().toString();
                         Toast.makeText(HomeActivity.this, "Failed: " + error, Toast.LENGTH_SHORT).show();
-                        loader.dismiss();
                     }
+                    loader.dismiss();
                 });
 
             }
