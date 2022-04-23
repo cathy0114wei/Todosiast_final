@@ -3,6 +3,7 @@ package com.example.mobile_final;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -10,6 +11,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements LogoutListener {
 
@@ -19,14 +22,13 @@ public class MainActivity extends AppCompatActivity implements LogoutListener {
     ImageView imageView;
     TextView textView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //get the login and logout ready
-        ((MyApp)getApplication()).registerSessionListener(this);
-        ((MyApp)getApplication()).startUserSession();
+        //((MyApp)getApplication()).registerSessionListener(this);
+        //((MyApp)getApplication()).startUserSession();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
@@ -51,13 +53,17 @@ public class MainActivity extends AppCompatActivity implements LogoutListener {
     @Override
     public void onUserInteraction(){
         super.onUserInteraction();
-        ((MyApp)getApplication()).onUserInteraction();
+        //((MyApp)getApplication()).onUserInteraction();
     }
 
     //only when log out, prompt user to log back in
     @Override
     public void onSessionLogout() {
-        finish();
-        startActivity(new Intent(this, LoginActivity.class));
+        //finish();
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

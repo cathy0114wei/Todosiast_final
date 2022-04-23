@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.WindowManager;
@@ -77,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             if (task.getException() != null) {
                                 String error = task.getException().toString();
-                                Toast.makeText(LoginActivity.this, "Login falied" + error, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Login failed" + error, Toast.LENGTH_SHORT).show();
                             }
                         }
                         loader.dismiss();
