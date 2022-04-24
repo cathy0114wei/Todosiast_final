@@ -160,13 +160,13 @@ public class HomeActivity extends AppCompatActivity {
 //        } else {
 //            System.out.println("no sr found on device");
 //        }
-        sr = SpeechRecognizer.createSpeechRecognizer(this, ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
+        //sr = SpeechRecognizer.createSpeechRecognizer(this, ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
 
-        //sr = SpeechRecognizer.createSpeechRecognizer(this);
+        sr = SpeechRecognizer.createSpeechRecognizer(this);
 
         Intent srIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        //srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        //srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        srIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         imageButton.setOnClickListener(view -> {
             if (count == 0) {
                 imageButton.setImageDrawable(getDrawable(R.drawable.ic_baseline_mic_24));

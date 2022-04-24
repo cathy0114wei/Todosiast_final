@@ -22,7 +22,7 @@ public class MyApp extends Application {
             public void run() {
                 listener.onSessionLogout();
             }
-        }, 15000);
+        }, 5000);
     }
 
     private void cancelTimer() {
