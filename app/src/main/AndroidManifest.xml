@@ -4,13 +4,18 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--
+    android:icon="@mipmap/ic_launcher_todo"
+    android:roundIcon="@mipmap/ic_launcher_todo_round"
+    -->
 
     <application
         android:name=".MyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_todo"
+        android:icon="@mipmap/ic_launcher_logo_version2"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_todo_round"
+
+        android:roundIcon="@mipmap/ic_launcher_logo_version2_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_final">
         <activity
