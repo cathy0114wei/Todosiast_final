@@ -293,6 +293,7 @@ public class HomeActivity extends AppCompatActivity {
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        /*
                         if (!holder.textView.getPaint().isStrikeThruText()) {
                             holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             holder.finish.setVisibility(View.VISIBLE);
@@ -300,6 +301,10 @@ public class HomeActivity extends AppCompatActivity {
                             holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             holder.finish.setVisibility(View.GONE);
                         }
+
+                         */
+                        holder.setFinish(!model.getFinished());
+                        notifyDataSetChanged();
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
                     }
                 });
@@ -311,13 +316,6 @@ public class HomeActivity extends AppCompatActivity {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.retrieved_layout, parent, false);
                 return new MyViewHolder(view);
             }
-/*
-            @NonNull
-            @Override
-            public Model getItem(int position) {
-                return super.getItem(getItemCount() - (position + 1));
-            }
- */
         };
         recyclerView.setAdapter(adapter);
         adapter.startListening();
@@ -334,6 +332,7 @@ public class HomeActivity extends AppCompatActivity {
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        /*
                         if (!holder.textView.getPaint().isStrikeThruText()) {
                             holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             holder.finish.setVisibility(View.VISIBLE);
@@ -341,6 +340,10 @@ public class HomeActivity extends AppCompatActivity {
                             holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             holder.finish.setVisibility(View.GONE);
                         }
+
+                         */
+                        holder.setFinish(!model.getFinished());
+                        notifyDataSetChanged();
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
                     }
                 });
@@ -421,6 +424,7 @@ public class HomeActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
