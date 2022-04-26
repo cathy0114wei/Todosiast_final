@@ -293,16 +293,6 @@ public class HomeActivity extends AppCompatActivity {
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        /*
-                        if (!holder.textView.getPaint().isStrikeThruText()) {
-                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            holder.finish.setVisibility(View.VISIBLE);
-                        } else {
-                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                            holder.finish.setVisibility(View.GONE);
-                        }
-
-                         */
                         holder.setFinish(!model.getFinished());
                         notifyDataSetChanged();
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
@@ -332,16 +322,6 @@ public class HomeActivity extends AppCompatActivity {
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        /*
-                        if (!holder.textView.getPaint().isStrikeThruText()) {
-                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            holder.finish.setVisibility(View.VISIBLE);
-                        } else {
-                            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                            holder.finish.setVisibility(View.GONE);
-                        }
-
-                         */
                         holder.setFinish(!model.getFinished());
                         notifyDataSetChanged();
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
