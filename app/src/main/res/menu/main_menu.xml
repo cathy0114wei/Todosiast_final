@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/sendEmail"
-        android:title="share your tasks"/>
+        android:title="@string/share_tasks"/>
     <item
         android:id="@+id/reward"
-        android:title="Reward"/>
+        android:title="@string/reward"/>
 <!--&gt;>>>>>> 2dc5caf6a1fcfe5060a924171b3245b4f2a35211-->
 
     <item

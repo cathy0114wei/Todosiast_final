@@ -35,7 +35,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="Your real Email password:"
+                android:gravity="center"
+                android:text="@string/your_real_email_password"
                 android:textColor="#000"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -92,7 +93,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="Email to:"
+                android:text="@string/email_to"
+                android:gravity="center"
                 android:textColor="#000"
                 android:textStyle="bold" />
         </RelativeLayout>

@@ -41,6 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_margin="16dp"
+                    android:contentDescription="@string/fab_des"
                     android:src="@drawable/ic_baseline_post_add_24"
                     app:background="@color/black" />
                 <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
