@@ -14,60 +14,97 @@
         android:background="#fff"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:ignore="MissingConstraints" />
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/icon2"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"/>
-    <EditText
-        android:id="@+id/RegistrationEmail"
+        tools:ignore="MissingConstraints" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/todosiast_text"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="5"
+            android:shadowDy="4"
+            android:shadowRadius="3"
+            android:textColor="@color/purple_500"
+            android:textSize="25sp"
+            android:fontFamily="monospace"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Email.."
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/inputs"
-        android:drawableStart="@drawable/ic_baseline_email_24"
-        android:drawablePadding="10dp"
-        android:padding="10dp"/>
-    <EditText
-        android:id="@+id/RegistrationPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter password..."
-        android:layout_margin="10dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
-        android:inputType="textPassword"
-        android:background="@drawable/inputs"
-        android:drawableStart="@drawable/ic_lock"
-        android:drawablePadding="10dp"
-        android:padding="10dp"/>
-    <Button
-        android:id="@+id/RegistrationButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:textAllCaps="false"
-        android:layout_margin="10dp"
-        android:textColor="#000"
-        android:textSize="20sp"
-        android:background="#fff"/>
-    <TextView
-        android:id="@+id/RegistrationPageQuestion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Have an account? Login"
-        android:textColor="#fff"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/icon2"
+                android:contentDescription="@string/people_work_together" />
+
+            <EditText
+                android:id="@+id/RegistrationEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/inputs"
+                android:drawableStart="@drawable/ic_baseline_email_24"
+                android:drawablePadding="10dp"
+                android:hint="@string/enter_email"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="#fff"
+                android:textColorHint="#fff" />
+
+            <EditText
+                android:id="@+id/RegistrationPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/inputs"
+                android:drawableStart="@drawable/ic_lock"
+                android:drawablePadding="10dp"
+                android:hint="@string/enter_password"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="#fff"
+                android:textColorHint="#fff" />
+
+            <Button
+                android:id="@+id/RegistrationButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#fff"
+                android:text="@string/register"
+                android:textAllCaps="false"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/RegistrationPageQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:paddingBottom="30dp"
+                android:text="@string/have_an_account_login"
+                android:textColor="#fff" />
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

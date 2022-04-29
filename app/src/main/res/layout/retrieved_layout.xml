@@ -30,9 +30,9 @@
             android:layout_marginTop="-2dp"
             android:layout_marginEnd="21dp"
             android:padding="10dp"
-            android:text="April 4, 2022"
+            android:text="@string/date_info"
             android:textColor="#454343"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="italic" />
 
         <TextView
@@ -46,9 +46,9 @@
             android:layout_marginEnd="-2dp"
             android:layout_marginBottom="-2dp"
             android:padding="10dp"
-            android:text="Finished"
+            android:text="@string/finished_text"
             android:textColor="#8B0000"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="italic"
             tools:visibility="gone" />
 
@@ -62,7 +62,7 @@
             android:layout_marginTop="-1dp"
             android:layout_toEndOf="@+id/checkBox"
             android:padding="5dp"
-            android:text="Task"
+            android:text="@string/task_text"
             android:textColor="#000"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -76,7 +76,7 @@
             android:layout_marginStart="74dp"
             android:layout_marginTop="34dp"
             android:layout_toEndOf="@+id/checkBox"
-            android:text="Description"
+            android:text="@string/description_text"
             android:textColor="#000"
             android:textSize="15sp" />
     </RelativeLayout>

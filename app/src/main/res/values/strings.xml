@@ -13,4 +13,18 @@
     <string name="email_to">Email to:</string>
     <string name="share_tasks">Share Tasks</string>
     <string name="reward">Reward</string>
+    <string name="date_info">April 4, 2022</string>
+    <string name="finished_text">Finished</string>
+    <string name="task_text">Task</string>
+    <string name="description_text">Description</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account? Register</string>
+    <string name="login">Login</string>
+    <string name="enter_password">Enter password...</string>
+    <string name="enter_email">Enter Email..</string>
+    <string name="have_an_account_login">Have an account? Login</string>
+    <string name="register">Register</string>
+    <string name="people_work_together">People work together</string>
+    <string name="todosiast_text">Todosiast</string>
 </resources>
