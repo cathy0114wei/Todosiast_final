@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.*;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -75,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private int count;
     private SpeechRecognizer sr;
+    private LottieAnimationView lottieAnimationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,8 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Todo List App");
         mAuth = FirebaseAuth.getInstance();
+        lottieAnimationView = findViewById(R.id.animationView);
+        lottieAnimationView.bringToFront();
 
         recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -291,6 +296,14 @@ public class HomeActivity extends AppCompatActivity {
                         holder.setFinish(!model.getFinished());
                         notifyDataSetChanged();
                         reference.child(getRef(position).getKey()).child("finished").setValue(!model.getFinished());
+                        lottieAnimationView.setVisibility(View.VISIBLE);
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                lottieAnimationView.setVisibility(View.INVISIBLE);
+                            }
+                        }, 2000);
                     }
                 });
             }
