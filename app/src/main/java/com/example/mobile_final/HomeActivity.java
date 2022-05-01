@@ -27,7 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
+//import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -56,7 +56,7 @@ import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+
     private RecyclerView recyclerView;
     private RecyclerView recyclerView2;
     //    private FloatingActionButton floatingActionButton1;
@@ -87,9 +87,9 @@ public class HomeActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home);
 
-        toolbar = findViewById(R.id.homeToolbar);
+        Toolbar toolbar = findViewById(R.id.homeToolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Todo List App");
+        getSupportActionBar().setTitle("Todosiast");
         mAuth = FirebaseAuth.getInstance();
         lottieAnimationView = findViewById(R.id.animationView);
         lottieAnimationView.bringToFront();
