@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.homeToolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Todo List App");
+        getSupportActionBar().setTitle("Todosiast");
         mAuth = FirebaseAuth.getInstance();
         lottieAnimationView = findViewById(R.id.animationView);
         lottieAnimationView.bringToFront();
